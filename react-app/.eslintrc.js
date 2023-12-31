@@ -25,5 +25,12 @@ module.exports = {
     sourceType: 'module',
   },
   plugins: ['@typescript-eslint', 'react', '@stylexjs'],
-  rules: { '@stylexjs/valid-styles': ['error'] },
+  rules: {
+    '@stylexjs/valid-styles': [
+      'error',
+      {
+        animationName: 'off',
+      },
+    ],
+  },
 };

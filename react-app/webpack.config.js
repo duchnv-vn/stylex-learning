@@ -2,6 +2,7 @@
 /* eslint-disable no-undef */
 const StylexPlugin = require('@stylexjs/webpack-plugin');
 const path = require('path');
+const Dotenv = require('dotenv-webpack');
 
 const config = (env, argv) => ({
   entry: {
@@ -39,6 +40,10 @@ const config = (env, argv) => ({
         // The absolute path to the root directory of your project
         rootDir: 'src',
       },
+    }),
+    new Dotenv({
+      path: './.env',
+      safe: true,
     }),
   ],
   cache: true,
