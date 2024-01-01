@@ -1,15 +1,36 @@
+/* eslint-disable @stylexjs/valid-styles */
 import React, { useState } from 'react';
-import { create, keyframes, props, firstThatWorks } from '@stylexjs/stylex';
+import {
+  create,
+  props,
+  keyframes,
+  firstThatWorks,
+  StyleXStyles,
+  StyleXStylesWithout,
+} from '@stylexjs/stylex';
+import { fadeInKeyFrame } from './keyframe.stylex';
+import { colors, tokens } from '../../common/styles/tokens.stylex';
+import { dracula } from '../../common/themes/theme_1';
 
-export default function Home() {
-  const fadeIn = keyframes({
-    from: { opacity: 0 },
-    to: { opacity: 1 },
-  });
+interface Props {
+  homeStyles: StyleXStyles<{
+    backgroundColor: string;
+    marginTop: 0 | 4 | 8 | 16;
+  }>;
+  titleStyles?: StyleXStylesWithout<{
+    textAlign: unknown;
+  }>;
+}
+
+export default function Home(homeProps: Props) {
+  const [isActive, setIsActive] = useState(true);
+  const [color, setColor] = useState('white');
+
+  const fadeIn = keyframes(fadeInKeyFrame);
 
   const styles = create({
     homeSection: {
-      backgroundColor: 'gray',
+      backgroundColor: /* tokens.secondaryText */ 'yellow',
       color: 'white',
       height: '100vh',
     },
@@ -18,18 +39,15 @@ export default function Home() {
       height: '50px',
     },
     title: {
-      // eslint-disable-next-line @stylexjs/valid-styles
       animationName: fadeIn,
       animationDuration: '1s',
-      // eslint-disable-next-line @stylexjs/valid-styles
       position: firstThatWorks('sticky', '-webkit-sticky', 'fixed'),
       top: '15px',
       left: '200px',
     },
-    button: (width: string, height: string, color?: string) => ({
+    button: (width: string, height: string, color: string | null = null) => ({
       width,
       height,
-
       cursor: 'pointer',
       backgroundColor: {
         default: 'lightblue',
@@ -71,45 +89,46 @@ export default function Home() {
         '@media (max-width: 480px)': 'auto',
       },
     },
+    /* container: {
+      color: colors.primaryText,
+      backgroundColor: colors.background,
+    }, */
   });
 
-  const [isActive, setIsActive] = useState(true);
-  const [color, setColor] = useState('white');
-
-  console.log('styles', styles);
-
   return (
-    <section {...props(styles.homeSection)}>
-      <div {...props(styles.h1Wrapper)}>
-        <span {...props(styles.title)}>Home page</span>
-      </div>
-      <div className='basicStyles'>
-        <input
-          {...props(styles.input)}
-          placeholder='Enter value here'
-          onChange={(e) => setColor(e.target.value || 'yellow')}
-        />
-        <button
-          {...props(styles.button('100px', '50px'))}
-          onClick={() => setIsActive(!isActive)}
-        >
-          {String(isActive)}
-        </button>
-        <button
-          {...props(
-            styles.button('200px', '50px', color),
-            isActive && styles.activeButton
-          )}
-        >
-          Button
-        </button>
-      </div>
-      <div className='mediaQuery' {...props(styles.blogContainer)}>
-        <section {...props(styles.blog)}>Blog 1</section>
-        <section {...props(styles.blog)}>Blog 2</section>
-        <section {...props(styles.blog)}>Blog 3</section>
-        <section {...props(styles.blog)}>Blog 4</section>
-      </div>
-    </section>
+    <div /* {...props(dracula, styles.container)} */>
+      <section {...props(styles.homeSection, homeProps.homeStyles)}>
+        <div {...props(styles.h1Wrapper)}>
+          <span {...props(styles.title, homeProps.titleStyles)}>Home page</span>
+        </div>
+        <div className='basicStyles'>
+          <input
+            {...props(styles.input)}
+            placeholder='Enter value here'
+            onChange={(e) => setColor(e.target.value || 'yellow')}
+          />
+          <button
+            {...props(styles.button('100px', '50px'))}
+            onClick={() => setIsActive(!isActive)}
+          >
+            {String(isActive)}
+          </button>
+          <button
+            {...props(
+              styles.button('200px', '50px', color),
+              isActive && styles.activeButton
+            )}
+          >
+            Button
+          </button>
+        </div>
+        <div className='mediaQuery' {...props(styles.blogContainer)}>
+          <section {...props(styles.blog)}>Blog 1</section>
+          <section {...props(styles.blog)}>Blog 2</section>
+          <section {...props(styles.blog)}>Blog 3</section>
+          <section {...props(styles.blog)}>Blog 4</section>
+        </div>
+      </section>
+    </div>
   );
 }

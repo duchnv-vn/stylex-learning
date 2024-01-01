@@ -15,7 +15,10 @@ function App() {
 
   return (
     <div className='App'>
-      <Home />
+      <Home
+        homeStyles={{ backgroundColor: 'blue', marginTop: 32 }}
+        titleStyles={{ cursor: 'pointer', textAlign: 'center' }}
+      />
     </div>
   );
 }

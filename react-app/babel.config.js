@@ -1,26 +1,31 @@
-// babel.config.js
-import styleXPlugin from '@stylexjs/babel-plugin';
+/**
+ * Copyright (c) Ladifire, Inc. and its affiliates.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
 
-const config = {
+/*eslint-env node*/
+module.exports = {
+  presets: ['@babel/react', '@babel/env', '@babel/preset-typescript'],
   plugins: [
+    '@babel/plugin-syntax-dynamic-import',
+    '@babel/plugin-proposal-object-rest-spread',
+    '@babel/plugin-transform-runtime',
+    ['@babel/plugin-transform-modules-commonjs'],
     [
-      styleXPlugin,
+      '@babel/plugin-transform-spread',
       {
-        dev: true,
-        // Set this to true for snapshot testing
-        // default: false
-        test: false,
-        // Required for CSS variable support
-        unstable_moduleResolution: {
-          // type: 'commonJS' | 'haste'
-          // default: 'commonJS'
-          type: 'commonJS',
-          // The absolute path to the root directory of your project
-          rootDir: 'src',
-        },
+        loose: true,
       },
     ],
+    ['@babel/plugin-proposal-decorators', { legacy: true }],
+    ['@babel/plugin-proposal-class-properties', { loose: true }],
+    // [
+    //   "@ladifire-opensource/babel-plugin-transform-stylex",
+    //   {
+    //     "inject": true, // will inject compiled css to stylesheet in head
+    //   }
+    // ]
   ],
 };
-
-export default config;
